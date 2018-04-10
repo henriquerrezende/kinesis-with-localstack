@@ -27,7 +27,7 @@ import static org.mockito.Mockito.verify;
  * Make sure that docker is running locally
  */
 @RunWith(LocalstackDockerTestRunner.class)
-@LocalstackDockerProperties(hostNameResolver = EC2HostNameResolver.class)
+@LocalstackDockerProperties(services = {"dynamodb", "kinesis"})
 @SpringBootTest
 @ActiveProfiles("integration-test")
 public class KinesisMessageProcessorIT {
@@ -52,7 +52,8 @@ public class KinesisMessageProcessorIT {
   private AmazonKinesis kinesisClient;
 
   static {
-    TestUtils.setEnv("SERVICES", "kinesis,dynamodb");
+    TestUtils.setEnv("AWS_ACCESS_KEY_ID", "some_aws_access_key_id");
+    TestUtils.setEnv("AWS_SECRET_ACCESS_KEY", "some_aws_secret_access_key");
 
     // https://github.com/mhart/kinesalite/blob/master/README.md#cbor-protocol-issues-with-the-java-sdk
     TestUtils.setEnv("AWS_CBOR_DISABLE", "1");
